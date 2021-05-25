@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using board;
 
-namespace board
+namespace ConsoleChess
 {
     class Screen
     {
