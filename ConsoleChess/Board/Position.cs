@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Board
+namespace board
 {
+    //Classe que implementa o sistema de posicionamento das peças.
     class Position
     {
         public int line { get; set; }

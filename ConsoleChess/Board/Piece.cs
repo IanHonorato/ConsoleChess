@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Board
+namespace board
 {
+    //Classe que implementa as peças
     class Piece
     {
         public Position position { get; set; }
