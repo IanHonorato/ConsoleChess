@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace board
 {
     //Classe que implementa as peças
-    class Piece
+    abstract class Piece
     {
         public Position position { get; set; }
         public Color color { get; protected set; }
@@ -24,5 +24,7 @@ namespace board
         public void addnMoves() {
             nMoves++;
         }
+
+        public abstract bool[,] availableMovements();
     }
 }

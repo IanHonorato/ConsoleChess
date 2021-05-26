@@ -11,9 +11,14 @@ namespace chess
     {
         public Queen(Board board, Color color) : base(board, color) { }
 
+        public override bool[,] availableMovements()
+        {
+            throw new NotImplementedException();
+        }
+
         public override string ToString()
         {
-            return "D ";
+            return "D";
         }
     }
 }

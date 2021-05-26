@@ -11,6 +11,11 @@ namespace chess
     {
         public Knight(Board board, Color color) : base(board, color) { }
 
+        public override bool[,] availableMovements()
+        {
+            throw new NotImplementedException();
+        }
+
         public override string ToString()
         {
             return "C";
