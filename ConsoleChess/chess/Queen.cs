@@ -13,7 +13,7 @@ namespace chess
 
         public override string ToString()
         {
-            return "D";
+            return "D ";
         }
     }
 }

@@ -8,13 +8,21 @@ namespace ConsoleChess
     {
         static void Main(string[] args)
         {
-            Board board = new Board(8, 8);
+            GameController match = new GameController();
 
-            board.putPiece(new Rook(board, Color.Black), new Position(0, 0));
-            board.putPiece(new Queen(board, Color.White), new Position(3, 4));
-            board.putPiece(new King(board, Color.Black), new Position(1, 0));
-            
-            Screen.printBoard(board);
+            while (!match.finished) {
+
+                Console.Clear();
+                Screen.printBoard(match.board);
+
+                Console.WriteLine();
+                Console.Write("Origem: ");
+                Position origin = Screen.readChessPosition().toPosition();
+                Console.Write("Destino: ");
+                Position destiny = Screen.readChessPosition().toPosition();
+
+                match.movePiece(origin, destiny);
+            }
 
             
             //ChessPosition pos = new ChessPosition('c', 7);

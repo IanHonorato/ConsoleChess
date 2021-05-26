@@ -43,6 +43,17 @@ namespace board
             p.position = pos;
         }
 
+        //Retira peça do tabuleiro
+        public Piece removePiece(Position pos) {
+            if (piece(pos) == null)
+                return null;
+            
+            Piece aux = piece(pos);
+            aux.position = null;
+            pieces[pos.line, pos.column] = null;
+            return aux;
+        }
+
         //Verifica se a posição não excede os limites do tabuleiro
         public bool validPosition(Position pos) {
             if (pos.line < 0 || pos.line >= lines || pos.column < 0 || pos.column >= columns)
