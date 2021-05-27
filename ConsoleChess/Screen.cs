@@ -10,6 +10,15 @@ namespace ConsoleChess
 {
     class Screen
     {
+        public static void printMatch(GameController match) {
+            printBoard(match.board);
+            Console.WriteLine();
+            printCapturedPieces(match);
+            Console.WriteLine();
+            Console.WriteLine("Turno: " + match.turn);
+            Console.WriteLine("Aguardando jogada: " + match.currentPlayer);
+
+        }
 
         //imprime tabuleiro na tela
         public static void printBoard(Board board) {
@@ -58,7 +67,7 @@ namespace ConsoleChess
             return new ChessPosition(column, line);
         }
 
-        //imprime a peça dentro do tabuleiro
+        //Imprime a peça dentro do tabuleiro
         public static void printPiece(Piece piece) {
             if (piece == null)
                 Console.Write("- ");
@@ -77,6 +86,29 @@ namespace ConsoleChess
                 }
                 Console.Write(" ");
             }
+        }
+
+        //Imprime as peças capturadas
+        public static void printCapturedPieces(GameController match)
+        {
+            Console.WriteLine("Peças Capturadas:");
+            Console.Write("Brancas: ");
+            printSet(match.capturedPieces(Color.White));
+            Console.WriteLine();
+            Console.Write("Pretas: ");
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            printSet(match.capturedPieces(Color.Black));
+            Console.ForegroundColor = aux;
+            Console.WriteLine();
+        }
+
+        //Imprime conjunto
+        public static void printSet(HashSet<Piece> hashset) {
+            Console.Write("[");
+            foreach (Piece x in hashset)
+                Console.Write(x + " ");
+            Console.Write("]");
         }
     }
 }
