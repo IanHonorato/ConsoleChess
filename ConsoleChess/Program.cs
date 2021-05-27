@@ -13,24 +13,38 @@ namespace ConsoleChess
             GameController match = new GameController();
 
             while (!match.finished) {
+                try
+                {
+                    Console.Clear();
+                    Screen.printBoard(match.board);
+                    Console.WriteLine();
+                    Console.WriteLine("Turno: " + match.turn);
+                    Console.WriteLine("Aguardando jogada: " + match.currentPlayer);
 
-                Console.Clear();
-                Screen.printBoard(match.board);
+                    Console.WriteLine();
+                    Console.Write("Origem: ");
+                    Position origin = Screen.readChessPosition().toPosition();
+                    match.validateOriginPosition(origin);
 
-                Console.WriteLine();
-                Console.Write("Origem: ");
-                Position origin = Screen.readChessPosition().toPosition();
 
-                bool[,] availablePositions = match.board.piece(origin).availableMovements();
+                    bool[,] availablePositions = match.board.piece(origin).availableMovements();
 
-                Console.Clear();
-                Screen.printBoard(match.board, availablePositions);
+                    Console.Clear();
+                    Screen.printBoard(match.board, availablePositions);
 
-                Console.WriteLine();
-                Console.Write("Destino: ");
-                Position destiny = Screen.readChessPosition().toPosition();
+                    Console.WriteLine();
+                    Console.Write("Destino: ");
+                    Position destiny = Screen.readChessPosition().toPosition();
+                    match.validateDestinyPosition(origin, destiny);
 
-                match.movePiece(origin, destiny);
+
+                    match.perfomMove(origin, destiny);
+                }
+                catch (BoardException e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.ReadLine();
+                }
             }
 
             //} catch {
