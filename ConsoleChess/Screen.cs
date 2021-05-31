@@ -16,12 +16,21 @@ namespace ConsoleChess
             printCapturedPieces(match);
             Console.WriteLine();
             Console.WriteLine("Turno: " + match.turn);
-            Console.WriteLine("Aguardando jogada: " + match.currentPlayer);
 
-            if (match.inCheck) {
-                Console.WriteLine("XEQUE!");
+            if (!match.finished)
+            {
+
+                Console.WriteLine("Aguardando jogada: " + match.currentPlayer);
+
+                if (match.inCheck)
+                {
+                    Console.WriteLine("XEQUE!");
+                }
             }
-
+            else {
+                Console.WriteLine("XEQUEMATE!");
+                Console.WriteLine("Vencedor: " + match.currentPlayer);
+            }
         }
 
         //imprime tabuleiro na tela

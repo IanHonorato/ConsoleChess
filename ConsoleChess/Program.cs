@@ -8,45 +8,49 @@ namespace ConsoleChess
     {
         static void Main(string[] args)
         {
-            //try { 
+            try { 
 
-            GameController match = new GameController();
+                GameController match = new GameController();
 
-            while (!match.finished) {
-                try
-                {
-                    Console.Clear();
-                    Screen.printMatch(match);
+                while (!match.finished) {
+                    try
+                    {
+                        Console.Clear();
+                        Screen.printMatch(match) ;
 
-                    Console.WriteLine();
-                    Console.Write("Origem: ");
-                    Position origin = Screen.readChessPosition().toPosition();
-                    match.validateOriginPosition(origin);
-
-
-                    bool[,] availablePositions = match.board.piece(origin).availableMovements();
-
-                    Console.Clear();
-                    Screen.printBoard(match.board, availablePositions);
-
-                    Console.WriteLine();
-                    Console.Write("Destino: ");
-                    Position destiny = Screen.readChessPosition().toPosition();
-                    match.validateDestinyPosition(origin, destiny);
+                        Console.WriteLine();
+                        Console.Write("Origem: ");
+                        Position origin = Screen.readChessPosition().toPosition();
+                        match.validateOriginPosition(origin);
 
 
-                    match.perfomMove(origin, destiny);
+                        bool[,] availablePositions = match.board.piece(origin).availableMovements();
+
+                        Console.Clear();
+                        Screen.printBoard(match.board, availablePositions);
+
+                        Console.WriteLine();
+                        Console.Write("Destino: ");
+                        Position destiny = Screen.readChessPosition().toPosition();
+                        match.validateDestinyPosition(origin, destiny);
+
+
+                        match.perfomMove(origin, destiny);
+                    }
+                    catch (BoardException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.ReadLine();
+                    }
                 }
-                catch (BoardException e)
-                {
-                    Console.WriteLine(e.Message);
-                    Console.ReadLine();
-                }
+
+                Console.Clear();
+                Screen.printMatch(match);
+
+            } catch(BoardException e) {
+                Console.WriteLine(e.Message);
             }
 
-            //} catch {
-
-            //}  
             Console.ReadLine();
         }
     }

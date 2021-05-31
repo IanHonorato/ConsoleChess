@@ -55,7 +55,10 @@ namespace chess
             else
                 inCheck = false;
 
-            changePlayer();
+            if (checkmateTest(opponent(currentPlayer)))
+                finished = true;
+            else
+                changePlayer();
         }
 
         public void rollbackMovement(Position origin, Position destiny, Piece capturedPiece)
@@ -154,6 +157,35 @@ namespace chess
                     return true;
             }
             return false;
+        }
+
+        public bool checkmateTest(Color color)
+        {
+            if (!hasCheck(color))
+                return false;
+
+            foreach (Piece x in inGamePieces(color))
+            {
+                bool[,] mat = x.availableMovements();
+                for(int i = 0; i < board.lines; i++)
+                {
+                    for (int j = 0; j < board.columns; j++) {
+                        if (mat[i, j])
+                        {
+                            Position origin = x.position;
+                            Position destiny = new Position(i, j);
+                            Piece capturedPiece = movePiece(origin, destiny);
+                            bool checkTest = hasCheck(color);
+                            rollbackMovement(origin, destiny, capturedPiece);
+
+                            if (!checkTest)
+                                return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
 
         public void putNewPiece(char column, int line, Piece piece) {
