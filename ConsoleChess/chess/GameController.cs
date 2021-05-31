@@ -14,6 +14,7 @@ namespace chess
         public bool finished;
         private HashSet<Piece> c_pieces;
         private HashSet<Piece> c_captured;
+        public bool inCheck { get; private set; }
 
         public GameController() {
             board = new Board(8, 8);
@@ -26,7 +27,7 @@ namespace chess
         }
 
         //Executa o movimento da peça
-        public void movePiece(Position origin, Position destiny) {
+        public Piece movePiece(Position origin, Position destiny) {
             Piece p = board.removePiece(origin);
             p.addnMoves();
             Piece capturedPiece =  board.removePiece(destiny);
@@ -34,13 +35,41 @@ namespace chess
 
             if (capturedPiece != null)
                 c_captured.Add(capturedPiece);
+
+            return capturedPiece;
         }
 
         //Executa a jogada inteira feita pelo jogador
         public void perfomMove(Position origin, Position destiny) {
-            movePiece(origin, destiny);
-            //turn++;
+            Piece capturedPiece = movePiece(origin, destiny);
+
+            if (hasCheck(currentPlayer))
+            {
+                rollbackMovement(origin, destiny, capturedPiece);
+                throw new BoardException("Você não pode se colocar em xeque!");
+            }
+
+            if (hasCheck(opponent(currentPlayer)))
+                inCheck = true;
+            
+            else
+                inCheck = false;
+
             changePlayer();
+        }
+
+        public void rollbackMovement(Position origin, Position destiny, Piece capturedPiece)
+        {
+            Piece p = board.removePiece(destiny);
+            p.remMoves();
+
+            if (capturedPiece != null)
+            {
+                board.putPiece(capturedPiece, destiny);
+                c_captured.Remove(capturedPiece);
+            }
+
+            board.putPiece(p, origin);
         }
 
         //Faz a troca dos turnos
@@ -91,6 +120,40 @@ namespace chess
             }
             aux.ExceptWith(capturedPieces(color));
             return aux;
+        }
+
+        private Color opponent(Color color) {
+            if (color == Color.White)
+                return Color.Black;
+            else
+                return Color.White;
+        }
+
+        private Piece findKing(Color color)
+        {
+            foreach(Piece x in inGamePieces(color))
+            {
+                if (x is King)
+                    return x;
+            }
+            return null;
+
+        }
+
+        public bool hasCheck(Color color)
+        {
+            Piece king = findKing(color);
+
+            if (king == null)
+                throw new BoardException("Não tem rei da cor " + color + " no tabuleiro!");
+            
+            foreach(Piece x in inGamePieces(opponent(color)))
+            {
+                bool[,] mat = x.availableMovements();
+                if (mat[king.position.line, king.position.column])
+                    return true;
+            }
+            return false;
         }
 
         public void putNewPiece(char column, int line, Piece piece) {

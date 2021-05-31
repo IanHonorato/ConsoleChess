@@ -25,6 +25,11 @@ namespace board
             nMoves++;
         }
 
+        public void remMoves()
+        {
+            nMoves--;
+        }
+
         public bool hasAvailableMovements() { 
             bool[,] mat = availableMovements();
             for (int i = 0; i < board.lines; i++) {

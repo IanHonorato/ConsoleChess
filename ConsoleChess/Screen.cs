@@ -18,6 +18,10 @@ namespace ConsoleChess
             Console.WriteLine("Turno: " + match.turn);
             Console.WriteLine("Aguardando jogada: " + match.currentPlayer);
 
+            if (match.inCheck) {
+                Console.WriteLine("XEQUE!");
+            }
+
         }
 
         //imprime tabuleiro na tela
