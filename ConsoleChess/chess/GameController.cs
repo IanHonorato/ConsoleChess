@@ -36,6 +36,26 @@ namespace chess
             if (capturedPiece != null)
                 c_captured.Add(capturedPiece);
 
+            //#JogadasEspeciais castles
+            if (p is King && destiny.column == origin.column + 2)
+            {
+                Position originR = new Position(origin.line, origin.column + 3);
+                Position destinyR = new Position(origin.line, origin.column + 1);
+                Piece R = board.removePiece(originR);
+                R.addnMoves();
+                board.putPiece(R, destinyR);
+            }
+
+            //#JogadasEspeciais big castles
+            if (p is King && destiny.column == origin.column - 2)
+            {
+                Position originR = new Position(origin.line, origin.column - 4);
+                Position destinyR = new Position(origin.line, origin.column - 1);
+                Piece R = board.removePiece(originR);
+                R.addnMoves();
+                board.putPiece(R, destinyR);
+            }
+
             return capturedPiece;
         }
 
@@ -73,6 +93,29 @@ namespace chess
             }
 
             board.putPiece(p, origin);
+
+            //#JogadaEspecial castles
+            if (p is King && destiny.column == origin.column + 2) {
+                Position originR = new Position(origin.line, origin.column + 3);
+                Position destinyR = new Position(origin.line, origin.column + 1);
+
+                Piece R = board.removePiece(originR);
+                R.addnMoves();
+
+                board.putPiece(R, destinyR);                   
+            }
+
+            //#JogadaEspecial big castles
+            if (p is King && destiny.column == origin.column - 2)
+            {
+                Position originR = new Position(origin.line, origin.column - 4);
+                Position destinyR = new Position(origin.line, origin.column - 1);
+
+                Piece R = board.removePiece(originR);
+                R.addnMoves();
+
+                board.putPiece(R, destinyR);
+            }
         }
 
         //Faz a troca dos turnos
@@ -198,7 +241,7 @@ namespace chess
             putNewPiece('b', 1, new Knight(board, Color.White));
             putNewPiece('c', 1, new Bishop(board, Color.White));
             putNewPiece('d', 1, new Queen(board, Color.White));
-            putNewPiece('e', 1, new King(board, Color.White));
+            putNewPiece('e', 1, new King(board, Color.White, this));
             putNewPiece('f', 1, new Bishop(board, Color.White));
             putNewPiece('g', 1, new Knight(board, Color.White));
             putNewPiece('h', 1, new Rook(board, Color.White));
@@ -215,7 +258,7 @@ namespace chess
             putNewPiece('b', 8, new Knight(board, Color.Black));
             putNewPiece('c', 8, new Bishop(board, Color.Black));
             putNewPiece('d', 8, new Queen(board, Color.Black));
-            putNewPiece('e', 8, new King(board, Color.Black));
+            putNewPiece('e', 8, new King(board, Color.Black, this));
             putNewPiece('f', 8, new Bishop(board, Color.Black));
             putNewPiece('g', 8, new Knight(board, Color.Black));
             putNewPiece('h', 8, new Rook(board, Color.Black));
