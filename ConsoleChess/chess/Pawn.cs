@@ -9,7 +9,10 @@ namespace chess
 {
     class Pawn : Piece
     {
-        public Pawn(Board board, Color color) : base(board, color) { }
+        private GameController match;
+        public Pawn(Board board, Color color, GameController match) : base(board, color) {
+            this.match = match;
+        }
 
         public override bool[,] availableMovements()
         {
@@ -34,6 +37,22 @@ namespace chess
                 pos.setValues(position.line - 1, position.column + 1);
                 if (board.validPosition(pos) && hasEnemy(pos))
                     mat[pos.line, pos.column] = true;
+
+                //#JogadaEspecial En Passant
+                if (position.line == 3)
+                {
+                    Position left = new Position(position.line, position.column - 1);
+                    if (board.validPosition(left) && hasEnemy(left) && board.piece(left) == match.vulnerableEnPassant)
+                    {
+                        mat[left.line - 1, left.column] = true;
+                    }
+
+                    Position right = new Position(position.line, position.column + 1);
+                    if (board.validPosition(right) && hasEnemy(right) && board.piece(right) == match.vulnerableEnPassant)
+                    {
+                        mat[right.line - 1, right.column] = true;
+                    }
+                }
             } 
             else
             {
@@ -52,6 +71,21 @@ namespace chess
                 pos.setValues(position.line + 1, position.column + 1);
                 if (board.validPosition(pos) && hasEnemy(pos))
                     mat[pos.line, pos.column] = true;
+
+                if (position.line == 4)
+                {
+                    Position left = new Position(position.line, position.column - 1);
+                    if (board.validPosition(left) && hasEnemy(left) && board.piece(left) == match.vulnerableEnPassant)
+                    {
+                        mat[left.line + 1, left.column] = true;
+                    }
+
+                    Position right = new Position(position.line, position.column + 1);
+                    if (board.validPosition(right) && hasEnemy(right) && board.piece(right) == match.vulnerableEnPassant)
+                    {
+                        mat[right.line + 1, right.column] = true;
+                    }
+                }
             }
 
             return mat;

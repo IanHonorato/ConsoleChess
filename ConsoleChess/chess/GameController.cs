@@ -15,6 +15,7 @@ namespace chess
         private HashSet<Piece> c_pieces;
         private HashSet<Piece> c_captured;
         public bool inCheck { get; private set; }
+        public Piece vulnerableEnPassant { get; private set; }
 
         public GameController() {
             board = new Board(8, 8);
@@ -23,6 +24,7 @@ namespace chess
             finished = false;
             c_pieces = new HashSet<Piece>();
             c_captured = new HashSet<Piece>();
+            vulnerableEnPassant = null;
             putPieces();
         }
 
@@ -56,6 +58,22 @@ namespace chess
                 board.putPiece(R, destinyR);
             }
 
+            //#JogadaEspecial en passant
+            if(p is Pawn)
+            {
+                if(origin.column != destiny.column && capturedPiece == null)
+                {
+                    Position posP;
+                    if (p.color == Color.White)
+                        posP = new Position(destiny.line + 1, destiny.column);
+                    else
+                        posP = new Position(destiny.line - 1, destiny.column);
+
+                    capturedPiece = board.removePiece(posP);
+                    c_captured.Add(capturedPiece);
+                }
+            }
+
             return capturedPiece;
         }
 
@@ -79,6 +97,14 @@ namespace chess
                 finished = true;
             else
                 changePlayer();
+
+            Piece p = board.piece(destiny);
+
+            //#JogadaEspecial EnPassant
+            if(p is Pawn && (destiny.line == origin.line - 2 || destiny.line == origin.line - 2))
+                vulnerableEnPassant = p;
+            else
+                vulnerableEnPassant = null;  
         }
 
         public void rollbackMovement(Position origin, Position destiny, Piece capturedPiece)
@@ -115,6 +141,23 @@ namespace chess
                 R.addnMoves();
 
                 board.putPiece(R, destinyR);
+            }
+
+            //#JogadaEspecial En Passant
+            if(p is Pawn)
+            {
+                if(origin.column != destiny.column && capturedPiece == vulnerableEnPassant)
+                {
+                    Piece pawn = board.removePiece(destiny);
+                    Position posP;
+                    
+                    if (p.color == Color.White)
+                        posP = new Position(3, destiny.column);
+                    else
+                        posP = new Position(4, destiny.column);
+
+                    board.putPiece(p, posP);
+                }
             }
         }
 
@@ -245,14 +288,14 @@ namespace chess
             putNewPiece('f', 1, new Bishop(board, Color.White));
             putNewPiece('g', 1, new Knight(board, Color.White));
             putNewPiece('h', 1, new Rook(board, Color.White));
-            putNewPiece('a', 2, new Pawn(board, Color.White));
-            putNewPiece('b', 2, new Pawn(board, Color.White));
-            putNewPiece('c', 2, new Pawn(board, Color.White));
-            putNewPiece('d', 2, new Pawn(board, Color.White));
-            putNewPiece('e', 2, new Pawn(board, Color.White));
-            putNewPiece('f', 2, new Pawn(board, Color.White));
-            putNewPiece('g', 2, new Pawn(board, Color.White));
-            putNewPiece('h', 2, new Pawn(board, Color.White));
+            putNewPiece('a', 2, new Pawn(board, Color.White, this));
+            putNewPiece('b', 2, new Pawn(board, Color.White, this));
+            putNewPiece('c', 2, new Pawn(board, Color.White, this));
+            putNewPiece('d', 2, new Pawn(board, Color.White, this));
+            putNewPiece('e', 2, new Pawn(board, Color.White, this));
+            putNewPiece('f', 2, new Pawn(board, Color.White, this));
+            putNewPiece('g', 2, new Pawn(board, Color.White, this));
+            putNewPiece('h', 2, new Pawn(board, Color.White, this));
 
             putNewPiece('a', 8, new Rook(board, Color.Black));
             putNewPiece('b', 8, new Knight(board, Color.Black));
@@ -262,14 +305,14 @@ namespace chess
             putNewPiece('f', 8, new Bishop(board, Color.Black));
             putNewPiece('g', 8, new Knight(board, Color.Black));
             putNewPiece('h', 8, new Rook(board, Color.Black));
-            putNewPiece('a', 7, new Pawn(board, Color.Black));
-            putNewPiece('b', 7, new Pawn(board, Color.Black));
-            putNewPiece('c', 7, new Pawn(board, Color.Black));
-            putNewPiece('d', 7, new Pawn(board, Color.Black));
-            putNewPiece('e', 7, new Pawn(board, Color.Black));
-            putNewPiece('f', 7, new Pawn(board, Color.Black));
-            putNewPiece('g', 7, new Pawn(board, Color.Black));
-            putNewPiece('h', 7, new Pawn(board, Color.Black));
+            putNewPiece('a', 7, new Pawn(board, Color.Black, this));
+            putNewPiece('b', 7, new Pawn(board, Color.Black, this));
+            putNewPiece('c', 7, new Pawn(board, Color.Black, this));
+            putNewPiece('d', 7, new Pawn(board, Color.Black, this));
+            putNewPiece('e', 7, new Pawn(board, Color.Black, this));
+            putNewPiece('f', 7, new Pawn(board, Color.Black, this));
+            putNewPiece('g', 7, new Pawn(board, Color.Black, this));
+            putNewPiece('h', 7, new Pawn(board, Color.Black, this));
         }
     }
 }
