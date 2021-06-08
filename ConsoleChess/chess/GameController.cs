@@ -97,8 +97,39 @@ namespace chess
                 {
                     p = board.removePiece(destiny);
                     c_pieces.Remove(p);
-                    Piece queen = new Queen(board, p.color);
-                    c_pieces.Add(queen);
+
+                    Console.WriteLine("Digite a inicial da peça que você quer que o peão promova");
+                    string s = Console.ReadLine();
+                    char piece = s[0];
+                    
+                    if(piece == 'D' || piece == 'd')
+                    {
+                        Piece queen = new Queen(board, p.color);
+                        board.putPiece(queen, destiny);
+                        c_pieces.Add(queen);
+                    }
+
+                    if (piece == 'C' || piece == 'c')
+                    {
+                        Piece knight = new Knight(board, p.color);
+                        board.putPiece(knight, destiny);
+                        c_pieces.Add(knight);
+                    }
+
+                    if (piece == 'B' || piece == 'b')
+                    {
+                        Piece bishop = new Bishop(board, p.color);
+                        board.putPiece(bishop, destiny);
+                        c_pieces.Add(bishop);
+                    }
+
+                    if (piece == 'T' || piece == 't')
+                    {
+                        Piece rook = new Rook(board, p.color);
+                        board.putPiece(rook, destiny);
+                        c_pieces.Add(rook);
+                    }
+
                 }
             }
                 
